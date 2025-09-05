@@ -24,7 +24,7 @@ const documentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    processingState: {
+    processingStatus: {
         type: String,
         enum: ['pending', 'processing', 'completed', 'failed'],
         default: "pending"

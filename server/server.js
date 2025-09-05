@@ -3,9 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors"
 import path from "path"
 import { fileURLToPath } from 'url';
-import upload from "./middleware/upload.js";
-import { extractText, validateExtractedText } from "./middleware/textExtractor.js";
-// import Document from "./models/Document.js"
+import documentRoutes from "./routes/documentRoutes.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,37 +34,13 @@ app.get('/health', (req, res) => {
 
 
 
-
-app.get("/",(req,res)=>{
-    res.send("hello we working !!! yes sirrr")
-})
-
-
-app.post("upload",upload.single("pdf"), async(req,res)=>{
-  try {
-    if(!req.file){
-      return res.status(400).json(
-        {
-          success:false,
-          error:"No file Uploaded"
-
-        }
-      )
-    }
-
-  const extraction=  await extractText(req.file.path , req.file.mimetype)
- validateExtractedText(extraction.content);
-
- const document = await Do
+app.use("/api/documents",documentRoutes)
+// app.get("/",(req,res)=>{
+//     res.send("hello we working !!! yes sirrr")
+// })
 
 
 
-
-
-  } catch (error) {
-    
-  }
-} )
 
 ConnectDb()
 
