@@ -34,4 +34,4 @@ chunkSchema.index({ documentId: 1, chunkIndex: 1 });
 chunkSchema.index({ documentId: 1 });
 
 
-export default Chunk= mongoose.model("Chunk",chunkSchema)
+export default mongoose.model("Chunk",chunkSchema)

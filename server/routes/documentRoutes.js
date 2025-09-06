@@ -5,6 +5,7 @@ import fs from "fs"
 import { extractTextFromFile,validateExtractedText } from "../middleware/textExtractor.js";
 
 import upload from "../middleware/upload.js";
+import { processDocumentAsync } from "../services/documentProcessingService.js";
 const router = express.Router();
 
 // list of all the documents 
@@ -75,6 +76,9 @@ console.log({
 
     console.log('✅ Document saved:', document._id);
 
+
+
+    processDocumentAsync(document._id);
     res.status(201).json({
       success: true,
       message: 'Document uploaded successfully',
@@ -111,10 +115,6 @@ router.get("/:id",async(req,res)=>{
   try {
    
       const {doc_id} = req.params.id;
-    //    if(!doc_id){
-    //   console.log('hahah');
-      
-    // }
       console.log(doc_id);
       
   const document= await Document.findById(doc_id);

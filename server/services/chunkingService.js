@@ -15,6 +15,6 @@ for(let i=0 ; i< words.length; i+= chunksize - overlap ){
     )
 }
 }
-return chunks;
+return chunks; // chunks of the whole document 
 
 }
