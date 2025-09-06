@@ -10,9 +10,9 @@ const chunkSchema = new mongoose.Schema({
         required: true,
    },
    embedding: { 
-        type: Number,
-        required: true,
-   },chunkIndex: {
+        type: [Number],
+        required: true,}
+   ,chunkIndex: {
         type: Number,
         required: true, 
    },metadata:{

@@ -2,7 +2,7 @@
 import Chunk from "../models/Chunk.js";
 import Document from "../models/Document.js"
 import { fixedSizeChunking } from "./chunkingService.js";
-import { generateEmbedding } from "./geminiServices.js";
+import { generateEmbeddings } from "./geminiServices.js";
 // processing the document  savining chunks in the database along with the embeddings 
 const processDocument = async (documentId) => {
 
@@ -17,24 +17,37 @@ const processDocument = async (documentId) => {
     // chunking service from chunking js ( we use fixed size chunking )
     const chunks = fixedSizeChunking(document.content);
     console.log(`✂️ Created ${chunks.length} chunks`);
-
+// console.log(chunks)
 
     // now we generate embeddings
-    const chunkWithEmbeddings = [];
-    for (let i = 0; i < chunks.length; i++) {
-        const embeddings = await generateEmbedding(chunks[i].text);
-        chunkWithEmbeddings.push({
-            documentId: document._id,
-            text: chunks[i].text,
-            embedding: embeddings,
-            chunkIndex: i
-        });
+const texts = chunks.map(i=> i.text)
+
+    console.log(texts)
+    // for (let i = 0; i < chunks.length; i++) {
+        // console.log(chunks[i].text," this is chunk text")
+        const embeddings = await generateEmbeddings(texts);
+        //    console.log(embeddings[0])
+        // chunkWithEmbeddings.push({
+        //     documentId: document._id,
+        //     text: chunks[i].text,
+        //     embedding: embeddings,
+        //     chunkIndex: i
+        // });
+
+      const chunkWithEmbeddings = chunks.map((chunk, i) => ({
+    documentId: document._id,
+    text: chunk.text,
+    embedding: embeddings[i], // each embedding corresponds to the same chunk index
+    chunkIndex: i
+}));
+
+    // }
 
 
-    }
-
+    
     // now to save this in the database
-    await Chunk.insertMany(chunkWithEmbeddings);
+    // console.log(chunkWithEmbeddings)
+ await Chunk.insertMany(chunkWithEmbeddings);
     document.chunkCount = chunks.length;
     document.processingStatus = "completed";
     await document.save();

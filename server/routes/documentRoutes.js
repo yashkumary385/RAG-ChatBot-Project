@@ -41,10 +41,10 @@ router.post("/upload",upload.single("pdf"), async(req,res)=>{
         }
       )
     }
-    console.log(req.file.path," this the file")
+    // console.log(req.file.path," this the file")
   const extraction=  await extractTextFromFile(req.file.path , req.file.mimetype)
- validateExtractedText(extraction.content);
- console.log(extraction)
+//  validateExtractedText(extraction.content);
+//  console.log(extraction)
 
  const document = await Document.create({
   title:req.body.title || path.parse(req.file.originalname).name,
@@ -62,15 +62,15 @@ content: String(extraction.content || ""),
  })
 
 
-console.log({
-  title: req.body.title,
-  originalName: req.file.originalname,
-  content: typeof extraction.content,
-  fileSize: req.file.size,
-  mimeType: req.file.mimetype,
-  uploadPath: req.file.path,
-  metadata: extraction.metadata
-});
+// console.log({
+//   title: req.body.title,
+//   originalName: req.file.originalname,
+//   content: typeof extraction.content,
+//   fileSize: req.file.size,
+//   mimeType: req.file.mimetype,
+//   uploadPath: req.file.path,
+//   metadata: extraction.metadata
+// });
 
  fs.unlinkSync(req.file.path);
 
