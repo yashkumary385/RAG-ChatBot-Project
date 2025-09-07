@@ -4,6 +4,7 @@ import cors from "cors"
 import path from "path"
 import { fileURLToPath } from 'url';
 import documentRoutes from "./routes/documentRoutes.js"
+import queryRoutes from "./routes/questionRoutes.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,7 +40,7 @@ app.use("/api/documents",documentRoutes)
 //     res.send("hello we working !!! yes sirrr")
 // })
 
-
+app.use("/api/query",queryRoutes)
 
 
 ConnectDb()

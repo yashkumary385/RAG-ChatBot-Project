@@ -2,7 +2,7 @@
 import Chunk from "../models/Chunk.js";
 import Document from "../models/Document.js"
 import { fixedSizeChunking } from "./chunkingService.js";
-import { generateEmbeddings } from "./geminiServices.js";
+import { generateEmbeddings } from "./geminiservices.js";
 // processing the document  savining chunks in the database along with the embeddings 
 const processDocument = async (documentId) => {
 
@@ -22,18 +22,20 @@ const processDocument = async (documentId) => {
     // now we generate embeddings
 const texts = chunks.map(i=> i.text)
 
-    console.log(texts)
+    // console.log(texts)
+    
     // for (let i = 0; i < chunks.length; i++) {
-        // console.log(chunks[i].text," this is chunk text")
-        const embeddings = await generateEmbeddings(texts);
+        // console.log(chunks[i].text," this is chunk text") 
+        const embeddings = await generateEmbeddings(texts);// we get a whole embeddings array an loop through chunks add chunk text and embeddinga to the dic and store it in db
         //    console.log(embeddings[0])
         // chunkWithEmbeddings.push({
         //     documentId: document._id,
         //     text: chunks[i].text,
         //     embedding: embeddings,
         //     chunkIndex: i
-        // });
-
+        // };
+      
+        
       const chunkWithEmbeddings = chunks.map((chunk, i) => ({
     documentId: document._id,
     text: chunk.text,

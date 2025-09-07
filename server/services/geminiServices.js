@@ -33,20 +33,25 @@ const waitForRateLimit = async () => {
     requestTimes.push(now);
 };
 
-export const generateEmbeddings = async (text, retries = 3) => {
-    for (let i = 0; i < retries; i++) {
+export const generateEmbeddings = async (texts, retries = 3) => {
+    const embeddings = [];
+
+    for (let attempt = 0; attempt < retries; attempt++) {
         try {
-            await waitForRateLimit(); // FIXED: Added await
-            const result = await embeddingModel.embedContent(text);
-            // console.log(result,"thi is the result")
-            return result.embedding.values;
+            for (let i = 0; i < texts.length; i++) {
+                await waitForRateLimit(); // throttle API
+                const result = await embeddingModel.embedContent(texts[i]); // ✅ pass single chunk
+                embeddings.push(result.embedding.values); // push full vector
+            }
+            return embeddings; // return array of vectors
         } catch (error) {
-            console.log(`Embedding attempt ${i + 1} failed:`, error.message);
-            if (i === retries - 1) throw error;
-            await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+            console.log(`Embedding attempt ${attempt + 1} failed:`, error.message);
+            if (attempt === retries - 1) throw error;
+            await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
         }
     }
 };
+
 
 // IMPROVED: Better progress tracking
 // export const generateEmbedding = async (textArray) => {
@@ -75,11 +80,11 @@ export const generateEmbeddings = async (text, retries = 3) => {
 //     }
 // };
 
-export const generateAnswers = async (question, contextChunks) => {
+export const generateAnswers = async (question, context) => {
     try {
         await waitForRateLimit(); // FIXED: Added rate limiting for answers too
         
-        const context = contextChunks.map(chunks => chunks.text).join('\n\n');
+        // const context = contextChunks.map(chunks => chunks.text).join('\n\n');
         
         const prompt = `Context: ${context}
 
@@ -94,7 +99,9 @@ Instructions:
 Answer based on the context:`;
 
         const result = await textModel.generateContent(prompt);
-        return result.response.text();
+        const answer =  cleanResponseText( result.response.text())
+        // cleanResponseText(answer);
+        return answer;
         
     } catch (error) {
         console.error(`Answer generation failed:`, error.message);
@@ -102,6 +109,23 @@ Answer based on the context:`;
     }
 };
 
+const cleanResponseText = (text) => {
+    return text
+        // Remove excessive newlines and replace with single spaces
+        .replace(/\n+/g, ' ')
+        // Remove excessive spaces
+        .replace(/\s+/g, ' ')
+        // Remove leading/trailing whitespace
+        .trim()
+        // Remove any markdown formatting that might appear
+        .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold formatting
+        .replace(/\*(.*?)\*/g, '$1')     // Remove italic formatting
+        // Fix common formatting issues
+        .replace(/\s+\./g, '.') // Fix space before periods
+        .replace(/\s+,/g, ',')  // Fix space before commas
+        // Ensure proper spacing after periods
+        .replace(/\.([A-Z])/g, '. $1');
+};
 // Test function
 const testConnection = async () => {
     try {
