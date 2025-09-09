@@ -31,6 +31,8 @@ router.get("/",async(req,res)=>{
 // upload documents 
 
 router.post("/upload",upload.single("pdf"), async(req,res)=>{
+  console.log("file received", req.file);
+
   try {
     if(!req.file){
       return res.status(400).json(
