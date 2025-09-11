@@ -1,5 +1,5 @@
 // fixed-size chunking
-export const fixedSizeChunking = (text, chunksize=50, overlap=10)=>{
+export const fixedSizeChunking = (text, chunksize=200, overlap=20)=>{
 
 const words = text.split(/\s+/); // converting into an array splitting at white spaces 
 const chunks =[]; // to store an object of these arrays Example: "Hello world!" → ["Hello", "world!"]

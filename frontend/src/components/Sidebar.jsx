@@ -5,7 +5,7 @@ import Divider from '@mui/material/Divider'
 import { Button, Typography } from '@mui/material'
 import Box from '@mui/material/Box'   
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-import { getDocuments, uploadDocument } from '../../api'
+import { deleteDocument, getDocuments, uploadDocument } from '../../api'
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List'
 import { toast } from 'react-toastify'
@@ -24,7 +24,8 @@ const handleUpload =async (e) => {
   try {
     const res = await uploadDocument(e.target.files[0]);
     console.log(res.data);
-    toast.success("Documents fetched successfully")
+    toast.success("Documents Uploaded successfully")
+    documents();
 
   } catch (error) {
     console.error("Error uploading file:", error);
@@ -34,33 +35,56 @@ const handleUpload =async (e) => {
   console.log("Uploaded file:", e.target.files[0]);
   // You can add further processing of the file here
 }
-
-
-useEffect(() => {
     const documents = async()=>{
         try {
     const res = await getDocuments();
     setDocs(res.data.data);
+    // toast.success("Your Uploaded Documents Are Available To You In The Sidebar")
     console.log(res);
 } catch (error) {
     console.error("Error fetching documents:", error)
+    toast.error("Error Fetching Documents")
 }
     }
+
+useEffect(() => {
     documents();
-
-
 }, []);
+
+
 const handleId = (id)=>{
+  toast.success("Document Attached To Chat Now You Can Ask Questions About The Documents")
 // console.log(id)
  setSelectedDocId(id); 
 }
+
+const handleDelete = async(id)=>{
+  const confirm = window.confirm("Are You Sure You Want To Delete This Document?")
+  if(!confirm) return;
+  try {
+    const res = await deleteDocument(id);
+    console.log(res);
+    toast.success("Document Deleted Succesfully")
+    documents();
+    if(selectedDocId === id){
+      setSelectedDocId(null);
+    }
+  } catch (error) {
+    toast.error("Error Deleting Document" + error.message)
+    console.error("Error Deleting Document:", error)
+  }
+}
+
+
+
 // console.log(docs);
   return (
   <>
-  <Drawer variant="permanent" anchor="left" sx={{ width: 240, flexShrink: 0,
+  <Drawer variant="permanent" anchor="left" sx={{ width: 300, flexShrink: 0,
     '& .MuiDrawer-paper': {
-      width: 240,
+      width: 250,
       boxSizing: 'border-box',
+      overflow:"hidden"
     }, }}>
     <Toolbar variant='dense' sx={{ fontFamily: "Courier New, monospace", fontWeight: 600 , color:"white"}} >
         Documents
@@ -87,10 +111,17 @@ const handleId = (id)=>{
         <List>
          {docs ? docs.map((doc) => (
            
-            <Div sx={{      fontFamily: "Courier New, monospace" , fontWeight:600,
-}}  key={doc._id} >{doc.originalName}
-             <Button variant="contained"sx={{backgroundColor:"black" , color:"white" ,mt:2 , p:2, borderRadius:"50px" , fontFamily: "Courier New, monospace" , fontWeight:600,
+            <Div sx={{ fontFamily: "Courier New, monospace" , fontWeight:600, mb:1
+}}  key={doc._id} >{doc.originalName} 
+<Typography variant="body2" color="white" sx={{ fontFamily: "Courier New, monospace" , fontWeight:600,mb:1 }}>
+File Size : {doc.fileSize}
+
+</Typography>
+<Typography variant="body2" color="white" sx={{ fontFamily: "Courier New, monospace" , fontWeight:600, }}>Processing State : {doc.processingStatus}</Typography>
+             <Button variant="contained" sx={{  backgroundColor: selectedDocId === doc._id ? "green" :"black" , color:"white" ,mt:2 , p:2, borderRadius:"50px" , fontFamily: "Courier New, monospace" , fontWeight:600, mr:2
 }} onClick={()=>handleId(doc._id)}>{selectedDocId === doc._id ? "Selected" :"Select"}</Button>
+             <Button variant="contained"sx={{backgroundColor: selectedDocId === doc._id ? "red" :"black" , color:"white" ,mt:2 , p:2, borderRadius:"50px" , fontFamily: "Courier New, monospace" , fontWeight:600,
+}} onClick={()=>handleDelete(doc._id)}>Remove</Button>
               </Div>
             
          )) : []}

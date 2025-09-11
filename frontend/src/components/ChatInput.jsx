@@ -20,7 +20,9 @@ const ChatInput = ({onSend}) => {
     //   color='primary'
           sx={{
                backgroundColor:"black",
-               color:"white"
+               color:"white",
+               borderRadius:"50px",
+               ml:2
     // fontFamily: "Courier New, monospace" , fontWeight:600,
 
   }}

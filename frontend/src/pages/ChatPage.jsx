@@ -10,11 +10,19 @@ const ChatPage = () => {
     <Box sx={{ display: 'flex' ,
     height: '100vh'
     }}>
+      <Box 
+        sx={{
+      width: { xs: "100%", sm: 240 }, // 📱 Full width on mobile, fixed width on desktop
+      flexShrink: 0,
+    }}
+        
+    >
     <SideBar selectedDocId={selectedDocId} setSelectedDocId={setSelectedDocId}/>
+    </Box>
   <ChatWindow selectedDocId={selectedDocId}/>
   </Box>
     </>
   )
-}
+} 
 
 export default ChatPage

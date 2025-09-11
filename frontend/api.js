@@ -25,6 +25,10 @@ export const uploadDocument = (file) => {
 export const getDocuments = () => {
   return api.get("/documents");
 }
+// delete Docs 
+export const deleteDocument = (id) => {
+  return api.delete(`/documents/delete/${id}`);
+}
 
 // ask question
 export const askQuestion = (selectedDocId, msg) => {

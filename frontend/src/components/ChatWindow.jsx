@@ -16,6 +16,7 @@ import { useState } from 'react';
 import ChatInput from './ChatInput';
 import { askQuestion } from '../../api';
 import CircularProgress from "@mui/material/CircularProgress";
+import { toast } from 'react-toastify';
 // import ListItemText from '@mui/material'
 const ChatWindow = ({selectedDocId}) => {
     const [messages , setMessages] = useState([])
@@ -37,10 +38,16 @@ const ChatWindow = ({selectedDocId}) => {
       try {
         const res = await askQuestion(selectedDocId, msg)
         console.log(res)
+
+
         // setMessages((prev)=> [...prev,{sender:"bot", text:res.data.answer}])
-        setMessages((prev)=> ([...prev , {sender:"bot", text:res.data.answer}]))
+        // toast.error(res.data.StatusText === "Service Unavailable" && "ChatBot OverLoaded Try In a minute")
+         {res.data.statusText === "Too Many Requests" && toast.error("ChatBot OverLoaded Try In a minute")};
+
+        setMessages((prev)=> ([...prev , {sender:"bot", text:res.data.answer}]))   
         SetRecieve(false)
       } catch (error) {
+        
         console.log(error)
       }
     }
@@ -58,9 +65,9 @@ const ChatWindow = ({selectedDocId}) => {
       variant="h6"
       sx={{ fontFamily: "Courier New, monospace", fontWeight: 600, flexGrow: 1 }}
     >
-      RAG Chatbot
+    LIO BOT
     </Typography>
-    <Avatar alt="Remy Sharp" src="/public/chatbot.jpg" />
+    <Avatar alt="Remy Sharp" src="/chatbot.jpg" />
   </Toolbar>
 </AppBar>
 
@@ -81,25 +88,18 @@ const ChatWindow = ({selectedDocId}) => {
           {/* if(recieve){
         <CircularProgress />
     } */}
-   {recieve && (
-  <Box
-    sx={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      mt: 2,          // optional: margin top
-    }}
-  >
-    <CircularProgress />
-  </Box>
-)}
+ 
  <Typography variant="h5" color="initial" sx={{display:"flex" ,alignItems:"center" , justifyContent:"center", color:"white" ,fontFamily: "Courier New, monospace" , fontWeight:600 }}>
           LIO BOT
           </Typography>
         <List>
+
           { messages.length > 0 ? messages.map((msg, i) => (
+            
             <React.Fragment key={i}>
+
               <ListItem sx={{ justifyContent: msg.sender === "user" ? "flex-end" : "flex-start" }}>
+                
                 <Paper
                   sx={{
                     p: 1.5,
@@ -108,12 +108,18 @@ const ChatWindow = ({selectedDocId}) => {
                     borderRadius: 2,
                     maxWidth: "70%",
                   }}
+                  
                 >
-                  <ListItemText primary={msg.text} 
-                  sx={{fontFamily: "Courier New, monospace" , fontWeight:600}}
+               { msg.sender === "bot" ? <Avatar alt="Remy Sharp" src="/chatbot.jpg" /> : <Avatar alt="Remy Sharp" src="/user1.png" />}
+               
+
+                  <ListItemText primary={msg.text}  sx={{fontFamily: "Courier New, monospace" , fontWeight:600}}
+                  
                   />
+
                 </Paper>
               </ListItem>
+              
               <Divider/>
             </React.Fragment>
           )) :
@@ -122,6 +128,21 @@ const ChatWindow = ({selectedDocId}) => {
           </Typography>
           }
         </List>
+             {recieve && selectedDocId &&  (
+  <Box
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      mt: 2,     
+      justifyContent:"flex-start" ,// optional: margin top
+     
+    }}
+
+  >
+    <CircularProgress sx={{ color:"white" ,mr:3}} />
+    <Typography variant="body2" color="initial" sx={{ color:"white"}}>Bot is typing....</Typography>
+  </Box>
+)}
       </Paper>
 
       <ChatInput onSend={handleSend} />

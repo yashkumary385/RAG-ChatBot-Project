@@ -92,7 +92,7 @@ Question: ${question}
 
 Instructions:
 - Answer based ONLY on the provided context 
-- If the answer isn't in the context, say "I cannot find this information"
+- If the answer isn't in the context, say "I cannot find this information . It is not stated in the provided files"
 - Be concise and accurate 
 - Mention which part of the context supports your answer
 
