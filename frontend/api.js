@@ -26,4 +26,11 @@ export const getDocuments = () => {
   return api.get("/documents");
 }
 
+// ask question
+export const askQuestion = (selectedDocId, msg) => {
+  console.log(selectedDocId, msg);
+  return api.post("/query", { documentId:selectedDocId, question:msg });
+}
+
+
 export default api;

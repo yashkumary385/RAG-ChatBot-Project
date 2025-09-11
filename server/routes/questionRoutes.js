@@ -5,6 +5,7 @@ const router = express.Router();
 
 
 router.post("/",async(req,res)=>{
+    console.log("question route hitt")
     const {question , documentId} = req.body;
     try {
   const searchResults =await searchSimilarChunks(question, documentId);
@@ -14,6 +15,7 @@ const contextChunks = searchResults.results.map(chunk => chunk._doc.text);
 //   console.log(contextChunks)
 const answer = await generateAnswers(question,contextChunks);
 console.log(answer)
+
 res.json({
     question,answer
 })

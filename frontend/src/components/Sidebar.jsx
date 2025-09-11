@@ -9,7 +9,7 @@ import { getDocuments, uploadDocument } from '../../api'
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List'
 import { toast } from 'react-toastify'
-const Sidebar = () => {
+const Sidebar = ({ selectedDocId, setSelectedDocId }) => {
 
     const [file , setFile] = useState(null);
      const[docs ,setDocs] = useState([]);
@@ -50,6 +50,10 @@ useEffect(() => {
 
 
 }, []);
+const handleId = (id)=>{
+// console.log(id)
+ setSelectedDocId(id); 
+}
 // console.log(docs);
   return (
   <>
@@ -58,7 +62,7 @@ useEffect(() => {
       width: 240,
       boxSizing: 'border-box',
     }, }}>
-    <Toolbar variant='dense' sx={{ fontFamily: "Courier New, monospace", fontWeight: 600 }} >
+    <Toolbar variant='dense' sx={{ fontFamily: "Courier New, monospace", fontWeight: 600 , color:"white"}} >
         Documents
     </Toolbar>
        <Divider />
@@ -68,6 +72,14 @@ useEffect(() => {
           component="label"
           fullWidth
             startIcon={<DriveFolderUploadIcon />}
+              sx={{
+      backgroundColor: "black",
+      fontFamily: "Courier New, monospace" , fontWeight:600,
+      color: "white",
+      "&:hover": {
+        backgroundColor: "#333", // slightly lighter black on hover
+      },
+    }}
         >
           Upload Doc
           <input hidden type="file" onChange={handleUpload} />
@@ -75,7 +87,12 @@ useEffect(() => {
         <List>
          {docs ? docs.map((doc) => (
            
-            <Div  key={doc._id} >{doc.originalName} </Div>
+            <Div sx={{      fontFamily: "Courier New, monospace" , fontWeight:600,
+}}  key={doc._id} >{doc.originalName}
+             <Button variant="contained"sx={{backgroundColor:"black" , color:"white" ,mt:2 , p:2, borderRadius:"50px" , fontFamily: "Courier New, monospace" , fontWeight:600,
+}} onClick={()=>handleId(doc._id)}>{selectedDocId === doc._id ? "Selected" :"Select"}</Button>
+              </Div>
+            
          )) : []}
         </List>
 
