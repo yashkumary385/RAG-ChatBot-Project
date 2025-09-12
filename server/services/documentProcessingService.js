@@ -2,7 +2,7 @@
 import Chunk from "../models/Chunk.js";
 import Document from "../models/Document.js"
 import { fixedSizeChunking } from "./chunkingService.js";
-import { generateEmbeddings } from "./geminiServices.js";
+import { generateEmbeddings } from "./geminiservices.js";
 // processing the document  savining chunks in the database along with the embeddings 
 const processDocument = async (documentId) => {
 

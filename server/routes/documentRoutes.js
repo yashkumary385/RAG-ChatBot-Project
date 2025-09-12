@@ -54,7 +54,6 @@ router.post("/upload",upload.single("pdf"), async(req,res)=>{
 content: String(extraction.content || ""),
   fileSize:req.file.size,
   mimeType:req.file.mimetype,
-  uploadPath:req.file.path,
   processingState:"pending",
 // chunkCount: chunking not done at this point
    metadata:extraction.metadata

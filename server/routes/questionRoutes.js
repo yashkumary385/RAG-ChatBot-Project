@@ -1,6 +1,6 @@
 import express from "express"
 import { searchSimilarChunks } from "../services/serachQueryService.js";
-import { generateAnswers } from "../services/geminiServices.js";
+import { generateAnswers } from "../services/geminiservices.js";
 // import QueryCache from "../models/QueryCache.js";
 import QueryCache from "../models/QueryCache.js"
 const router = express.Router();
