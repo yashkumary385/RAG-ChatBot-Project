@@ -6,6 +6,12 @@ import { fileURLToPath } from 'url';
 import documentRoutes from "./routes/documentRoutes.js"
 import queryRoutes from "./routes/questionRoutes.js"
 
+if (process.env.NODE_ENV === "production") {
+  dotenv.config({ path: ".env.production" });
+} else {
+  dotenv.config({ path: ".env.development" });
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // console.log(import.meta.url);
