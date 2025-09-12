@@ -4,6 +4,11 @@ import path from "path";
 // destination to store
 console.log('multer hitt');
 
+import fs from "fs";
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
+
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
 
