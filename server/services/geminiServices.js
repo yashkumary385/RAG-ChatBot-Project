@@ -126,26 +126,4 @@ const cleanResponseText = (text) => {
         // Ensure proper spacing after periods
         .replace(/\.([A-Z])/g, '. $1');
 };
-// Test function
-const testConnection = async () => {
-    try {
-        console.log('🧪 Testing Gemini connection...');
-        
-        // Test single embedding
-        const testText = ['Hello world test'];
-        const embedding = await generateEmbedding(testText);
-        console.log('✅ Embedding test passed, vector length:', embedding[0].length);
-        
-        // Test answer generation
-        const answer = await generateAnswers('What is this?', [{ text: 'This is a test document' }]);
-        console.log('✅ Text generation test passed:', answer.substring(0, 50) + '...');
-        
-        return true;
-    } catch (error) {
-        console.error('❌ Gemini connection test failed:', error.message);
-        return false;
-    }
-};
 
-// Uncomment to test
-// testConnection();

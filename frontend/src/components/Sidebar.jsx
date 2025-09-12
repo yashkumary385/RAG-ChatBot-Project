@@ -9,27 +9,27 @@ import { deleteDocument, getDocuments, uploadDocument } from '../../api'
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List'
 import { toast } from 'react-toastify'
-const Sidebar = ({ selectedDocId, setSelectedDocId }) => {
+const Sidebar = ({ selectedDocId, setSelectedDocId ,mobileOpen , setMobileOpen}) => {
 
-    const [file , setFile] = useState(null);
      const[docs ,setDocs] = useState([]);
-
+const drawerWidth = 250
 const Div = styled('div')(({ theme }) => ({
   ...theme.typography.button,
   backgroundColor: (theme.vars || theme).palette.background.paper,
   padding: theme.spacing(1),
 }));
+
 const handleUpload =async (e) => {
-  setFile(e.target.files[0]);
   try {
     const res = await uploadDocument(e.target.files[0]);
     console.log(res.data);
     toast.success("Documents Uploaded successfully")
-    documents();
-
+    pollDocuments(2000,5)
+    // documents();
+    
   } catch (error) {
     console.error("Error uploading file:", error);
-    toast.error("Error fetching documents" + error.message)
+    toast.error("Error Uploading documents"   +   error.response.data.error)
 
   }
   console.log("Uploaded file:", e.target.files[0]);
@@ -50,6 +50,20 @@ const handleUpload =async (e) => {
 useEffect(() => {
     documents();
 }, []);
+
+const pollDocuments = (interval = 2000, maxAttempts = 5) => {
+  let attempts = 0;
+  const poll = setInterval(async () => {
+    attempts++;
+    await documents(); // refresh docs
+
+    // Stop after max attempts
+    if (attempts >= maxAttempts) {
+      clearInterval(poll);
+    }
+  }, interval);
+};
+
 
 
 const handleId = (id)=>{
@@ -75,18 +89,9 @@ const handleDelete = async(id)=>{
   }
 }
 
-
-
-// console.log(docs);
-  return (
+const drawerContent = (
   <>
-  <Drawer variant="permanent" anchor="left" sx={{ width: 300, flexShrink: 0,
-    '& .MuiDrawer-paper': {
-      width: 250,
-      boxSizing: 'border-box',
-      overflow:"hidden"
-    }, }}>
-    <Toolbar variant='dense' sx={{ fontFamily: "Courier New, monospace", fontWeight: 600 , color:"white"}} >
+ <Toolbar variant='dense' sx={{ fontFamily: "Courier New, monospace", fontWeight: 600 , color:"white"}} >
         Documents
     </Toolbar>
        <Divider />
@@ -130,6 +135,46 @@ File Size : {doc.fileSize}
 
        </Box>
 
+  </>
+)
+  
+
+
+// console.log(docs);
+  return (
+  <>
+{/* mobile drawer */}
+ <Drawer variant="temporary"  
+ open={mobileOpen}
+ anchor="left"
+        onClose={() => setMobileOpen(false)}
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          display: { xs: 'block', sm: 'none' },
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+            overflow: 'hidden',
+          },
+        }}
+    
+    
+  >
+   {drawerContent}
+
+
+
+  </Drawer>
+  
+  <Drawer variant="permanent" anchor="left" sx={{ width: 300, flexShrink: 0,
+    display: { xs: 'none', sm: 'block' },
+    '& .MuiDrawer-paper': {
+      width: 250,
+      boxSizing: 'border-box',
+      overflow:"hidden"
+    }, }}
+    open>
+   {drawerContent}
 
 
 

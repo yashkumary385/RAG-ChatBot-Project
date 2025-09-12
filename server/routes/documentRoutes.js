@@ -1,8 +1,8 @@
-import express, { Router } from "express";
+import express from "express";
 import Document from "../models/Document.js";
 import path from "path"
 import fs from "fs"
-import { extractTextFromFile,validateExtractedText } from "../middleware/textExtractor.js";
+import { extractTextFromFile } from "../middleware/textExtractor.js";
 
 import upload from "../middleware/upload.js";
 import { processDocumentAsync } from "../services/documentProcessingService.js";
@@ -123,7 +123,7 @@ router.get("/:id",async(req,res)=>{
   if(!document){
       return res.status(404).json({
         success: false,
-        error: error
+        error: "file not uploaded "
       });
   }
     res.json({

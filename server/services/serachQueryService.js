@@ -6,7 +6,6 @@ dotenv.config();
 
 const api_key = process.env.Google_Api_Key;
 console.log("API Key loaded:", api_key ? "✅" : "❌");
-import { generateAnswers, generateEmbeddings } from "./geminiservices.js";
 import Chunk from "../models/Chunk.js";
 
 const genAI = new GoogleGenerativeAI(api_key);

@@ -68,7 +68,7 @@ const texts = chunks.map(i=> i.text)
            await document.save();
               
         } catch (error) {
-             console.error('Failed to update document status:', updateError);
+             console.error('Failed to update document status:',error);
         }
         // throw error
     }
