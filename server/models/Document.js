@@ -20,9 +20,6 @@ const documentSchema = new mongoose.Schema({
     mimeType: {
         type: String,
         required: true,
-    }, uploadPath: {
-        type: String,
-        required: true,
     },
     processingStatus: {
         type: String,
