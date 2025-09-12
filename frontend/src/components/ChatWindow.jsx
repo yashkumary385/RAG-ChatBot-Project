@@ -141,6 +141,7 @@ const ChatWindow = ({selectedDocId}) => {
   >
     <CircularProgress sx={{ color:"white" ,mr:3}} />
     <Typography variant="body2" color="initial" sx={{ color:"white"}}>Bot is typing....</Typography>
+   
   </Box>
 )}
       </Paper>
