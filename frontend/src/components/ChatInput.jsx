@@ -1,10 +1,15 @@
 import { Box, TextField , IconButton } from '@mui/material'
 import React, { useState } from 'react'
 import SendIcon from "@mui/icons-material/Send";
+import { toast } from 'react-toastify';
 const ChatInput = ({onSend}) => {
     const [input , setInput] = useState("")
     const handleSend = ()=>{
-        if(!input.trim()) return;
+        if(!input.trim()) {  
+       
+        toast.error("Blank Messages Are Not Allowed")
+          console.log(input)
+          return;}
         onSend(input);
         setInput("")
     }

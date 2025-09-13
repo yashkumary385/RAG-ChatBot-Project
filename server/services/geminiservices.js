@@ -1,8 +1,11 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
 
-dotenv.config();
-
+if (process.env.NODE_ENV === "production") {
+  dotenv.config({ path: ".env.production" });
+} else {
+  dotenv.config({ path: ".env.development" });
+}
 const api_key = process.env.Google_Api_Key;
 console.log("API Key loaded:", api_key ? "✅" : "❌");
 
@@ -94,14 +97,24 @@ Instructions:
 - Answer based ONLY on the provided context 
 - If the answer isn't in the context, say "I cannot find this information . It is not stated in the provided files"
 - Be concise and accurate 
-- Mention which part of the context supports your answer
+// - Mention which part of the context supports your answer
+// - Answer the following question in clear bullet points:
+
+
 
 Answer based on the context:`;
 
         const result = await textModel.generateContent(prompt);
         const answer =  cleanResponseText( result.response.text())
+        const sentences = answer.match(/[^.!?]+[.!?]*/g) || [];
+const bullets = sentences
+  .map(s => s.trim())
+  .filter(Boolean)
+  .map(s => `- ${s}`)
+  .join('\n');
+
         // cleanResponseText(answer);
-        return answer;
+        return bullets;
         
     } catch (error) {
         console.error(`Answer generation failed:`, error.message);

@@ -22,11 +22,14 @@ const ChatWindow = ({selectedDocId}) => {
     const [messages , setMessages] = useState([])
     const [recieve , SetRecieve] = useState(false)
     const handleSend =async (msg)=>{
-          SetRecieve(true)
+    
           if (!selectedDocId) {
       setMessages((prev)=> [...prev, { sender: "bot", text: "⚠️ Please select a document first." }]);
+      SetRecieve(false);
       return;
     }
+          SetRecieve(true)
+
       // setMessages(...messages , [{sender:"user" , text:msg}])
       setMessages((prev)=> [...prev, { sender: "user", text: msg }]);
 
@@ -42,11 +45,12 @@ const ChatWindow = ({selectedDocId}) => {
 
         // setMessages((prev)=> [...prev,{sender:"bot", text:res.data.answer}])
         // toast.error(res.data.StatusText === "Service Unavailable" && "ChatBot OverLoaded Try In a minute")
-         {res.data.statusText === "Too Many Requests" && toast.error("ChatBot OverLoaded Try In a minute")};
+         {(res.data.statusText === "Too Many Requests" || "Service Unavailable") && toast.error("ChatBot OverLoaded Try In a minute Sorry But We use free tier LLM Models ")};
 
         setMessages((prev)=> ([...prev , {sender:"bot", text:res.data.answer}]))   
         SetRecieve(false)
       } catch (error) {
+        SetRecieve(false)
         
         console.log(error)
       }
@@ -128,7 +132,7 @@ const ChatWindow = ({selectedDocId}) => {
           </Typography>
           }
         </List>
-             {recieve && selectedDocId &&  (
+             {recieve && selectedDocId && handleSend && (
   <Box
     sx={{
       display: "flex",
