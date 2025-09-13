@@ -97,7 +97,7 @@ Instructions:
 - Answer based ONLY on the provided context 
 - If the answer isn't in the context, say "I cannot find this information . It is not stated in the provided files"
 - Be concise and accurate 
-// - Mention which part of the context supports your answer
+- Mention which part of the context supports your answer
 // - Answer the following question in clear bullet points:
 
 
@@ -106,15 +106,15 @@ Answer based on the context:`;
 
         const result = await textModel.generateContent(prompt);
         const answer =  cleanResponseText( result.response.text())
-        const sentences = answer.match(/[^.!?]+[.!?]*/g) || [];
-const bullets = sentences
-  .map(s => s.trim())
-  .filter(Boolean)
-  .map(s => `- ${s}`)
-  .join('\n');
+        // const sentences = answer.match(/[^.!?]+[.!?]*/g) || [];
+// const bullets = sentences
+//   .map(s => s.trim())
+//   .filter(Boolean)
+//   .map(s => `- ${s}`)
+//   .join('\n');
 
         // cleanResponseText(answer);
-        return bullets;
+        return answer;
         
     } catch (error) {
         console.error(`Answer generation failed:`, error.message);
