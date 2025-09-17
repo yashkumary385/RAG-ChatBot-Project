@@ -45,7 +45,12 @@ const ChatWindow = ({selectedDocId}) => {
 
         // setMessages((prev)=> [...prev,{sender:"bot", text:res.data.answer}])
         // toast.error(res.data.StatusText === "Service Unavailable" && "ChatBot OverLoaded Try In a minute")
-         {(res.data.statusText === "Too Many Requests" || "Service Unavailable") && toast.error("ChatBot OverLoaded Try In a minute Sorry But We use free tier LLM Models ")};
+        if(res.data.statusText === "Too Many Requests" || res.data.statusText === "Service Unavailable") {
+          toast.error("ChatBot OverLoaded Try In a minute Sorry But We use free tier LLM Models ");
+          SetRecieve(false);
+          return;
+        }
+        //  {(res.data.statusText === "Too Many Requests" || "Service Unavailable") && toast.error("ChatBot OverLoaded Try In a minute Sorry But We use free tier LLM Models ")};
 
         setMessages((prev)=> ([...prev , {sender:"bot", text:res.data.answer}]))   
         SetRecieve(false)
