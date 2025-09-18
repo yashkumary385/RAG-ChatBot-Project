@@ -14,6 +14,7 @@ import Avatar from '@mui/material/Avatar';
 
 import { useState } from 'react';
 import ChatInput from './ChatInput';
+import Button from '@mui/material/Button';
 import { askQuestion } from '../../api';
 import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from 'react-toastify';
@@ -153,7 +154,7 @@ const ChatWindow = ({selectedDocId}) => {
    
   </Box>
 )}
-      </Paper>
+     </Paper>
 
       <ChatInput onSend={handleSend} />
     </Box>

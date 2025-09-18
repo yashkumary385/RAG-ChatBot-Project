@@ -95,13 +95,17 @@ const drawerContent = (
         Documents
     </Toolbar>
        <Divider />
-       <Box sx={{ p: 2 }}>
+       <Box sx={{ p: 2 ,    overflowY: "auto", height: "calc(100vh - 64px)",
+           scrollbarWidth: "none", 
+       }}>
          <Button
           variant="contained"
           component="label"
           fullWidth
             startIcon={<DriveFolderUploadIcon />}
+  
               sx={{
+                
       backgroundColor: "black",
       fontFamily: "Courier New, monospace" , fontWeight:600,
       color: "white",
