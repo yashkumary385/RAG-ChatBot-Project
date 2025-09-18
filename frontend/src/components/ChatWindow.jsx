@@ -75,7 +75,7 @@ const ChatWindow = ({selectedDocId}) => {
       variant="h6"
       sx={{ fontFamily: "Courier New, monospace", fontWeight: 600, flexGrow: 1 }}
     >
-    LIO BOT
+Campus ChatBot
     </Typography>
     <Avatar alt="Remy Sharp" src="/chatbot.jpg" />
   </Toolbar>
@@ -100,7 +100,7 @@ const ChatWindow = ({selectedDocId}) => {
     } */}
  
  <Typography variant="h5" color="initial" sx={{display:"flex" ,alignItems:"center" , justifyContent:"center", color:"white" ,fontFamily: "Courier New, monospace" , fontWeight:600 }}>
-          LIO BOT
+          Campus ChatBot
           </Typography>
         <List>
 
